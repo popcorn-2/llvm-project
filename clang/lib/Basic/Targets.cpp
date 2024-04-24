@@ -627,6 +627,9 @@ std::unique_ptr<TargetInfo> AllocateTarget(const llvm::Triple &Triple,
     case llvm::Triple::KFreeBSD:
       return std::make_unique<KFreeBSDTargetInfo<X86_64TargetInfo>>(Triple,
                                                                     Opts);
+    case llvm::Triple::Popcorn:
+      return std::make_unique<PopcornTargetInfo<X86_64TargetInfo>>(Triple,
+                                                                   Opts);
     case llvm::Triple::Solaris:
       return std::make_unique<SolarisTargetInfo<X86_64TargetInfo>>(Triple,
                                                                    Opts);
