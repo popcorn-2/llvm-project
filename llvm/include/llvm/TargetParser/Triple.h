@@ -252,7 +252,8 @@ public:
     ChipStar,
     Firmware,
     QURT,
-    LastOSType = QURT
+    Popcorn,
+    LastOSType = Popcorn
   };
   enum EnvironmentType {
     UnknownEnvironment,
@@ -884,6 +885,8 @@ public:
   bool isOSManagarm() const { return getOS() == Triple::Managarm; }
 
   bool isOSFirmware() const { return getOS() == Triple::Firmware; }
+
+  bool isOSPopcorn() const { return getOS() == Triple::Popcorn; }
 
   bool isShaderStageEnvironment() const {
     EnvironmentType Env = getEnvironment();
