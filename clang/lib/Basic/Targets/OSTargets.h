@@ -1042,6 +1042,34 @@ public:
   }
 };
 
+// Popcorn Target Info
+template <typename Target>
+class LLVM_LIBRARY_VISIBILITY PopcornTargetInfo : public OSTargetInfo<Target> {
+protected:
+  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+                    MacroBuilder &Builder) const override {
+    DefineStd(Builder, "unix", Opts);
+    Builder.defineMacro("__ELF__");
+    Builder.defineMacro("__POPCORN__");
+    Builder.defineMacro("_GNU_SOURCE");
+    Builder.defineMacro("_REENTRANT");
+
+  }
+
+public:
+  PopcornTargetInfo(const llvm::Triple &Triple, const TargetOptions &Opts)
+      : OSTargetInfo<Target>(Triple, Opts) {
+    switch (Triple.getArch()) {
+    default:
+      break;
+    case llvm::Triple::x86:
+    case llvm::Triple::x86_64:
+      this->HasFloat128 = true;
+      break;
+    }
+  }
+};
+
 } // namespace targets
 } // namespace clang
 #endif // LLVM_CLANG_LIB_BASIC_TARGETS_OSTARGETS_H
