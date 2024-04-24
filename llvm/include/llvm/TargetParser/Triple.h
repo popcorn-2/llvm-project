@@ -229,6 +229,7 @@ public:
     CUDA,   // NVIDIA CUDA
     NVCL,   // NVIDIA OpenCL
     AMDHSA, // AMD HSA Runtime
+    Popcorn,
     PS4,
     PS5,
     ELFIAMCU,
@@ -694,6 +695,11 @@ public:
   /// Tests whether the OS is Windows.
   bool isOSWindows() const {
     return getOS() == Triple::Win32;
+  }
+
+  /// Tests whether the OS is Popcorn.
+  bool isOSPopcorn() const {
+    return getOS() == Triple::Popcorn;
   }
 
   /// Checks if the environment is MSVC.
