@@ -117,7 +117,7 @@ parseFlavorWithoutMinGW(llvm::SmallVectorImpl<const char *> &argsV) {
   Flavor f = parseProgname(arg0);
   if (f == Invalid) {
     err("lld is a generic driver.\n"
-        "Invoke ld.lld (Unix), ld64.lld (macOS), lld-link (Windows), wasm-ld"
+        "Invoke ld.lld (Unix, Popcorn), ld64.lld (macOS), lld-link (Windows), wasm-ld"
         " (WebAssembly) instead");
     return Invalid;
   }
