@@ -15,7 +15,7 @@
 // argv[0] (i.e. command name). The most common name for each target is shown
 // below:
 //
-//  - ld.lld:    ELF (Unix)
+//  - ld.lld:    ELF (Unix, Popcorn)
 //  - ld64:      Mach-O (macOS)
 //  - lld-link:  COFF (Windows)
 //  - ld-wasm:   WebAssembly
