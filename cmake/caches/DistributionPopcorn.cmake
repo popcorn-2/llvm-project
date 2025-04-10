@@ -11,7 +11,7 @@ set(LLVM_TARGETS_TO_BUILD Native CACHE STRING "")
 set(CMAKE_BUILD_TYPE Release CACHE STRING "")
 
 # Setup vendor-specific settings.
-set(PACKAGE_VENDOR egkoppel CACHE STRING "")
+set(PACKAGE_VENDOR Popcorn2 CACHE STRING "")
 
 # Setting up the stage2 LTO option needs to be done on the stage1 build so that
 # the proper LTO library dependencies can be connected.
