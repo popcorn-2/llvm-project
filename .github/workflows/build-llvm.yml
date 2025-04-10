@@ -21,12 +21,12 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: ninja stage2-distribution
+      run: cmake --build ${{github.workspace}}/build --target stage2-distribution
 
     - name: Package
       run: |
         mkdir ${{github.workspace}}/pkg
-        DESTDIR="${{github.workspace}}/pkg" ninja stage2-install-distribution
+        DESTDIR="${{github.workspace}}/pkg" cmake --build ${{github.workspace}}/build --target stage2-install-distribution
 
     - name: Archive
       uses: actions/upload-artifact@v4
