@@ -2,7 +2,8 @@
 
 #Enable LLVM projects and runtimes
 set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra;lld" CACHE STRING "")
-set(LLVM_ENABLE_RUNTIMES "compiler-rt;libcxx;libcxxabi" CACHE STRING "")
+set(LLVM_ENABLE_RUNTIMES "compiler-rt;libcxx;libcxxabi;libunwind" CACHE STRING "")
+set(LLVM_ENABLE_LIBCXX "ON" CACHE BOOL "")
 
 # Only build the native target in stage1 since it is a throwaway build.
 set(LLVM_TARGETS_TO_BUILD Native CACHE STRING "")
