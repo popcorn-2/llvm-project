@@ -124,9 +124,7 @@ void popcorn::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 Popcorn::Popcorn(const Driver &D, const llvm::Triple &Triple,
                  const ArgList &Args)
     : ToolChain(D, Triple, Args) {
-  getProgramPaths().push_back(getDriver().getInstalledDir());
-  if (getDriver().getInstalledDir() != D.Dir)
-    getProgramPaths().push_back(D.Dir);
+  getProgramPaths().push_back(getDriver().Dir);
 
   if (!D.SysRoot.empty()) {
     SmallString<128> P(D.SysRoot);
