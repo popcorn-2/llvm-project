@@ -5,6 +5,8 @@ set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra;lld;lldb" CACHE STRING "")
 set(LLVM_ENABLE_RUNTIMES "compiler-rt;libcxx;libcxxabi;libunwind" CACHE STRING "")
 set(LLVM_ENABLE_LIBCXX "ON" CACHE BOOL "")
 
+set(LLVM_ENABLE_UNWIND_TABLES OFF CACHE BOOL "")
+
 set(LLVM_TARGETS_TO_BUILD X86 CACHE STRING "")
 
 set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "")
