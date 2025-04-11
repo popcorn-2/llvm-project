@@ -12,12 +12,17 @@ jobs:
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: [self-hosted, macOS, X64]
+    env:
+      SCCACHE_GHA_ENABLED: "true"
 
     steps:
+    - name: Run sccache-cache
+      uses: mozilla-actions/sccache-action@v0.0.9
+
     - uses: actions/checkout@v4
 
     - name: Configure CMake
-      run: cmake -G Ninja -B ${{github.workspace}}/build -C ${{github.workspace}}/cmake/caches/DistributionPopcorn.cmake ${{github.workspace}}/llvm
+      run: cmake -G Ninja -B ${{github.workspace}}/build -C ${{github.workspace}}/cmake/caches/DistributionPopcorn.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_C_COMPILER_LAUNCHER;CMAKE_CXX_COMPILER_LAUNCHER" ${{github.workspace}}/llvm
 
     - name: Build
       # Build your program with the given configuration
