@@ -31,6 +31,7 @@ jobs:
           -DCMAKE_C_COMPILER_LAUNCHER=sccache \
           -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
           -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_C_COMPILER_LAUNCHER;CMAKE_CXX_COMPILER_LAUNCHER" \
+          -DCMAKE_INSTALL_PREFIX="" \
           ${{github.workspace}}/llvm
         cmake --build ${{github.workspace}}/build --target distribution
 
@@ -38,7 +39,7 @@ jobs:
       run: |
         mkdir ${{github.workspace}}/pkg
         DESTDIR="${{github.workspace}}/pkg" cmake --build ${{github.workspace}}/build --target install-distribution
-        tar -C ${{github.workspace}}/pkg -czf llvm.tar.gz *
+        tar -C ${{github.workspace}}/pkg -czf llvm.tar.gz ${{github.workspace}}/pkg/*
 
     - name: Define version tag
       id: version
