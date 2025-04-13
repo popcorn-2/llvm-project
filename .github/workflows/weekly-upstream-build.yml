@@ -1,0 +1,73 @@
+name: Rebase & Build PopcornLLVM
+
+on:
+  schedule:
+    - cron: '0 0 1,15 * *' # 1st and 15th of each month
+  workflow_dispatch:     # manual trigger
+
+jobs:
+  build-llvm:
+    runs-on: ["X64", "macOS", "self-hosted"]
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+    - name: Checkout fork repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 10 # only pull enough to cover our extra commits
+
+    - name: Rebase onto upstream
+      run: |
+        git remote add upstream https://github.com/llvm/llvm-project.git
+        git fetch upstream main
+        git rebase upstream/main
+        git push --force-with-lease
+
+    - name: Build LLVM
+      run: |
+        cmake -G Ninja -B ${{github.workspace}}/build \
+          -C ${{github.workspace}}/cmake/caches/DistributionPopcorn.cmake \
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
+          -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_C_COMPILER_LAUNCHER;CMAKE_CXX_COMPILER_LAUNCHER" \
+          ${{github.workspace}}/llvm
+        cmake --build ${{github.workspace}}/build --target stage2-distribution
+
+    - name: Package Clang
+      run: |
+        mkdir ${{github.workspace}}/pkg
+        DESTDIR="${{github.workspace}}/pkg" cmake --build ${{github.workspace}}/build --target stage2-install-distribution
+        tar czf llvm.tar.gz ${{github.workspace}}/pkg
+
+    - name: Define version tag
+      id: version
+      run: |
+        UPSTREAM_SHA=$(git rev-parse --short upstream/main)
+        PATCH_SHA=$(git rev-parse --short HEAD)
+        TAG="popcorn-clang-${UPSTREAM_SHA}-${PATCH_SHA}"
+        echo "TAG=$TAG" >> $GITHUB_OUTPUT
+        echo "Generated release tag: $TAG"
+
+    - name: Create or update GitHub Release
+      run: |
+        TAG=${{ steps.version.outputs.TAG }}
+        RELEASE_NAME="Popcorn Clang Build - $TAG"
+
+        # Check if release exists
+        if gh release view "$TAG" > /dev/null 2>&1; then
+          echo "Release $TAG exists. Updating..."
+        else
+          echo "Creating release $TAG..."
+          gh release create "$TAG" \
+            --title "$RELEASE_NAME" \
+            --notes "Automated build of Popcorn LLVM based on upstream HEAD + patches."
+        fi
+
+        # Upload artifact
+        gh release upload "$TAG" llvm.tar.gz --clobber --prerelease
+
+    - name: Remove upstream
+      if: always()
+      run: |
+        git remote rm upstream
