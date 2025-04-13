@@ -38,7 +38,7 @@ jobs:
       run: |
         mkdir ${{github.workspace}}/pkg
         DESTDIR="${{github.workspace}}/pkg" cmake --build ${{github.workspace}}/build --target stage2-install-distribution
-        tar czf llvm.tar.gz ${{github.workspace}}/pkg
+        tar -C ${{github.workspace}}/pkg -czf llvm.tar.gz *
 
     - name: Define version tag
       id: version
@@ -54,18 +54,20 @@ jobs:
         TAG=${{ steps.version.outputs.TAG }}
         RELEASE_NAME="Popcorn Clang Build - $TAG"
 
+        gh repo set-default popcorn-2/llvm-project
+
         # Check if release exists
         if gh release view "$TAG" > /dev/null 2>&1; then
           echo "Release $TAG exists. Updating..."
         else
           echo "Creating release $TAG..."
-          gh release create "$TAG" \
+          gh release create "$TAG" --prerelease \
             --title "$RELEASE_NAME" \
             --notes "Automated build of Popcorn LLVM based on upstream HEAD + patches."
         fi
 
         # Upload artifact
-        gh release upload "$TAG" llvm.tar.gz --clobber --prerelease
+        gh release upload "$TAG" llvm.tar.gz --clobber
 
     - name: Remove upstream
       if: always()
