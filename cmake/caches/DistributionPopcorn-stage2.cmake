@@ -2,7 +2,7 @@
 # bootstrap build.
 
 set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra;lld" CACHE STRING "")
-set(LLVM_ENABLE_RUNTIMES "compiler-rt" CACHE STRING "")
+set(LLVM_ENABLE_RUNTIMES "compiler-rt;libunwind;libcxx;libcxxabi" CACHE STRING "")
 
 #set(LIBUNWIND_ENABLE_SHARED OFF CACHE BOOL "")
 #set(LIBUNWIND_INSTALL_LIBRARY OFF CACHE BOOL "")
@@ -68,6 +68,7 @@ set(LLVM_DISTRIBUTION_COMPONENTS
   clang-format
   clang-resource-headers
   builtins
+  runtimes
   lld
   ${LLVM_TOOLCHAIN_TOOLS}
   CACHE STRING "")
