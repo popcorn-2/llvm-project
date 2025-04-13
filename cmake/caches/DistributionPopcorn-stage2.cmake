@@ -74,3 +74,17 @@ set(LLVM_DISTRIBUTION_COMPONENTS
   lld
   ${LLVM_TOOLCHAIN_TOOLS}
   CACHE STRING "")
+
+message(STATUS "SYSROOT_PATH is: ${SYSROOT_PATH}")
+
+# Ensure that clang and runtimes use this sysroot
+#set(CMAKE_INSTALL_PREFIX "${SYSROOT_PATH}" CACHE PATH "")
+set(CMAKE_C_FLAGS "-L${SYSROOT_PATH}/lib" CACHE STRING "")
+set(CMAKE_CXX_FLAGS "-L${SYSROOT_PATH}/lib" CACHE STRING "")
+
+# For Apple, explicitly set the sysroot
+if(APPLE)
+  set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk" CACHE STRING "")
+  set(BUILTINS_CMAKE_ARGS "-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk;-DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}" CACHE STRING "")
+  set(RUNTIMES_CMAKE_ARGS "-DCMAKE_OSX_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk;-DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}" CACHE STRING "")
+endif()
