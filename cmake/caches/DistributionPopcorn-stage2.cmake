@@ -2,7 +2,6 @@
 # bootstrap build.
 
 set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra;lld" CACHE STRING "")
-set(LLVM_ENABLE_RUNTIMES "compiler-rt;libunwind;libcxx;libcxxabi" CACHE STRING "")
 
 #set(LIBUNWIND_ENABLE_SHARED OFF CACHE BOOL "")
 #set(LIBUNWIND_INSTALL_LIBRARY OFF CACHE BOOL "")
@@ -31,6 +30,8 @@ list(APPEND BUILTIN_TARGETS "default")
 list(APPEND BUILTIN_TARGETS "x86_64-unknown-popcorn")
 list(APPEND RUNTIME_TARGETS "default")
 list(APPEND RUNTIME_TARGETS "x86_64-unknown-popcorn")
+set(RUNTIMES_default_LLVM_ENABLE_RUNTIMES "compiler-rt;libcxx;libcxxabi;libunwind" CACHE STRING "")
+set(RUNTIMES_x86_64-unknown-popcorn_LLVM_ENABLE_RUNTIMES "compiler-rt" CACHE STRING "")
 
 set(LLVM_BUILTIN_TARGETS "${BUILTIN_TARGETS}" CACHE STRING "")
 set(LLVM_RUNTIME_TARGETS "${RUNTIME_TARGETS}" CACHE STRING "")
@@ -68,7 +69,6 @@ set(LLVM_DISTRIBUTION_COMPONENTS
   clang-format
   clang-resource-headers
   builtins
-  runtimes
   lld
   ${LLVM_TOOLCHAIN_TOOLS}
   CACHE STRING "")

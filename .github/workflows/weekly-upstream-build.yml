@@ -27,17 +27,17 @@ jobs:
     - name: Build LLVM
       run: |
         cmake -G Ninja -B ${{github.workspace}}/build \
-          -C ${{github.workspace}}/cmake/caches/DistributionPopcorn.cmake \
+          -C ${{github.workspace}}/cmake/caches/DistributionPopcorn-singlestage.cmake \
           -DCMAKE_C_COMPILER_LAUNCHER=sccache \
           -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
           -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_C_COMPILER_LAUNCHER;CMAKE_CXX_COMPILER_LAUNCHER" \
           ${{github.workspace}}/llvm
-        cmake --build ${{github.workspace}}/build --target stage2-distribution
+        cmake --build ${{github.workspace}}/build --target distribution
 
     - name: Package Clang
       run: |
         mkdir ${{github.workspace}}/pkg
-        DESTDIR="${{github.workspace}}/pkg" cmake --build ${{github.workspace}}/build --target stage2-install-distribution
+        DESTDIR="${{github.workspace}}/pkg" cmake --build ${{github.workspace}}/build --target install-distribution
         tar -C ${{github.workspace}}/pkg -czf llvm.tar.gz *
 
     - name: Define version tag
