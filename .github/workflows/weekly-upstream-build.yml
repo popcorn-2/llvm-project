@@ -61,7 +61,7 @@ jobs:
           echo "Release $TAG exists. Updating..."
         else
           echo "Creating release $TAG..."
-          gh release create "$TAG" --prerelease \
+          gh release create "$TAG" \
             --title "$RELEASE_NAME" \
             --notes "Automated build of Popcorn LLVM based on upstream HEAD + patches."
         fi
