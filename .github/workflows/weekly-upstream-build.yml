@@ -23,6 +23,12 @@ jobs:
         git fetch upstream main
         git rebase upstream/main
         git push --force-with-lease
+    
+    - name: Unpack sysroot
+      run: |
+        curl -L -O https://github.com/popcorn-2/mlibc/releases/latest/download/mlibc.tar.gz > mlibc.tar.gz
+        mkdir sysroot
+        tar -C sysroot/ -xzf $(pwd)/mlibc.tar.gz
 
     - name: Build LLVM
       run: |
@@ -32,6 +38,7 @@ jobs:
           -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
           -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_C_COMPILER_LAUNCHER;CMAKE_CXX_COMPILER_LAUNCHER" \
           -DCMAKE_INSTALL_PREFIX="" \
+          -DPOPCORN_SYSROOT=${{github.workspace}}/sysroot/ \
           ${{github.workspace}}/llvm
         cmake --build ${{github.workspace}}/build --target distribution
 
