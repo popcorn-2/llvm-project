@@ -126,11 +126,8 @@ Popcorn::Popcorn(const Driver &D, const llvm::Triple &Triple,
     : ToolChain(D, Triple, Args) {
   getProgramPaths().push_back(getDriver().Dir);
 
-  if (!D.SysRoot.empty()) {
-    SmallString<128> P(D.SysRoot);
-    llvm::sys::path::append(P, "lib");
-    getFilePaths().push_back(std::string(P.str()));
-  }
+  getFilePaths().push_back(concat(getDriver().SysRoot, "/system/lib"));
+  getFilePaths().push_back(concat(getDriver().SysRoot, "/user/lib"));
 }
 
 std::string Popcorn::ComputeEffectiveClangTriple(const ArgList &Args,
@@ -201,11 +198,8 @@ void Popcorn::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
     return;
 
-  if (!D.SysRoot.empty()) {
-    SmallString<128> P(D.SysRoot);
-    llvm::sys::path::append(P, "include");
-    addExternCSystemInclude(DriverArgs, CC1Args, P.str());
-  }
+  addExternCSystemInclude(DriverArgs, CC1Args, concat(D.SysRoot, "/system/include"));
+  addExternCSystemInclude(DriverArgs, CC1Args, concat(D.SysRoot, "/user/include"));
 }
 
 void Popcorn::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
@@ -216,9 +210,8 @@ void Popcorn::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
 
   switch (GetCXXStdlibType(DriverArgs)) {
   case ToolChain::CST_Libcxx: {
-    SmallString<128> P(getDriver().SysRoot);
-    llvm::sys::path::append(P, "include", "c++", "v1");
-    addSystemInclude(DriverArgs, CC1Args, P.str());
+    addSystemInclude(DriverArgs, CC1Args,
+      concat(getDriver().SysRoot, "/system/include/c++/v1"));
     break;
   }
 
@@ -232,6 +225,7 @@ void Popcorn::AddCXXStdlibLibArgs(const ArgList &Args,
   switch (GetCXXStdlibType(Args)) {
   case ToolChain::CST_Libcxx:
     CmdArgs.push_back("-lc++");
+    CmdArgs.push_back("-lc++abi");
     break;
 
   case ToolChain::CST_Libstdcxx:
