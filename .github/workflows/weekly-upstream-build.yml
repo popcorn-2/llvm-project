@@ -33,14 +33,12 @@ jobs:
     - name: Build LLVM
       run: |
         cmake -G Ninja -B ${{github.workspace}}/build \
+          -DPOPCORN_SYSROOT=${{github.workspace}}/sysroot \
           -C ${{github.workspace}}/cmake/caches/DistributionPopcorn-singlestage.cmake \
           -DCMAKE_C_COMPILER_LAUNCHER=sccache \
           -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
           -DCLANG_BOOTSTRAP_PASSTHROUGH="CMAKE_C_COMPILER_LAUNCHER;CMAKE_CXX_COMPILER_LAUNCHER" \
-          -DCMAKE_INSTALL_PREFIX="" \
-          -DPOPCORN_SYSROOT=${{github.workspace}}/sysroot/ \
-          -DLLVM_PARALLEL_LINK_JOBS=1 \
-          ${{github.workspace}}/llvm
+          -DLLVM_PARALLEL_LINK_JOBS=1 ${{github.workspace}}/llvm
         cmake --build ${{github.workspace}}/build --target distribution
 
     - name: Package Clang
