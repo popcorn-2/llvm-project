@@ -147,6 +147,7 @@ if (CMAKE_POSITION_INDEPENDENT_CODE OR NOT DEFINED CMAKE_POSITION_INDEPENDENT_CO
   set_target_properties(unwind_shared_objects PROPERTIES POSITION_INDEPENDENT_CODE ON) # must set manually because it's an object library
 endif()
 
+if (LIBUNWIND_ENABLE_SHARED)
 add_library(unwind_shared SHARED)
 target_link_libraries(unwind_shared PUBLIC unwind_shared_objects runtimes-libc-shared)
 set_target_properties(unwind_shared
