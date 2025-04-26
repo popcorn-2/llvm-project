@@ -369,6 +369,7 @@ enum {
   ELFOSABI_ARM_FDPIC = 65,     // ARM FDPIC
   ELFOSABI_C6000_ELFABI = 64,  // Bare-metal TMS320C6000
   ELFOSABI_C6000_LINUX = 65,   // Linux TMS320C6000
+  ELFOSABI_POPCORN = 200,      // Popcorn2
   ELFOSABI_STANDALONE = 255,   // Standalone (embedded) application
   ELFOSABI_LAST_ARCH = 255     // Last Architecture-specific OS ABI
 };
@@ -1545,6 +1546,8 @@ enum {
   PT_OPENBSD_NOBTCFI = 0x65a3dbe8,   // Do not enforce branch target CFI.
   PT_OPENBSD_SYSCALLS = 0x65a3dbe9,  // System call sites.
   PT_OPENBSD_BOOTDATA = 0x65a41be6,  // Section for boot arguments.
+
+  PT_POPCORN_capability = 0x61000000, // Popcorn2 capability list
 
   // ARM program header types.
   PT_ARM_ARCHEXT = 0x70000000, // Platform architecture compatibility info
