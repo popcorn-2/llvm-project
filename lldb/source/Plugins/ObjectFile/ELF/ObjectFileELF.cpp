@@ -524,6 +524,7 @@ static const char *OSABIAsCString(unsigned char osabi_byte) {
     _MAKE_OSABI_CASE(ELFOSABI_C6000_LINUX);
     _MAKE_OSABI_CASE(ELFOSABI_ARM);
     _MAKE_OSABI_CASE(ELFOSABI_STANDALONE);
+    _MAKE_OSABI_CASE(ELFOSABI_POPCORN);
   default:
     return "<unknown-osabi>";
   }
@@ -556,6 +557,9 @@ static bool GetOsFromOSABI(unsigned char osabi_byte,
     break;
   case ELFOSABI_SOLARIS:
     ostype = llvm::Triple::OSType::Solaris;
+    break;
+  case ELFOSABI_POPCORN:
+    ostype = llvm::Triple::OSType::Popcorn;
     break;
   default:
     ostype = llvm::Triple::OSType::UnknownOS;

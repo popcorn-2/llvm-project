@@ -931,6 +931,9 @@ bool ArchSpec::SetArchitecture(ArchitectureType arch_type, uint32_t cpu,
           case llvm::ELF::ELFOSABI_STANDALONE:
             m_triple.setOS(llvm::Triple::OSType::UnknownOS);
             break;
+          case llvm::ELF::ELFOSABI_POPCORN:
+            m_triple.setOS(llvm::Triple::OSType::Popcorn);
+            break;
           }
         } else if (arch_type == eArchTypeCOFF && os == llvm::Triple::Win32) {
           m_triple.setVendor(llvm::Triple::PC);
