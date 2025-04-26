@@ -173,6 +173,15 @@ private:
   uint8_t *hashBuf;
 };
 
+// .popcorn.capability section.
+class PopcornCapabilitySection : public SyntheticSection {
+  llvm::SmallVector<llvm::ArrayRef<uint8_t>> capabilities;
+public:
+  PopcornCapabilitySection(Ctx &ctx);
+  void writeTo(uint8_t *buf) override;
+  size_t getSize() const override;
+};
+
 // BssSection is used to reserve space for copy relocations and common symbols.
 // We create three instances of this class for .bss, .bss.rel.ro and "COMMON",
 // that are used for writable symbols, read-only symbols and common symbols,

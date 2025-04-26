@@ -65,6 +65,7 @@ class InputSection;
 class IpltSection;
 class MipsGotSection;
 class MipsRldMapSection;
+class PopcornCapabilitySection;
 class PPC32Got2Section;
 class PPC64LongBranchTargetSection;
 class PltSection;
@@ -325,6 +326,7 @@ struct Config {
   bool optEL = false;
   bool optimizeBBJumps;
   bool optRemarksWithHotness;
+  std::vector<std::string> popcorn_capabilities;
   bool picThunk;
   bool pie;
   bool printGcSections;
@@ -564,6 +566,8 @@ struct InStruct {
   std::unique_ptr<StringTableSection> strTab;
   std::unique_ptr<SymbolTableBaseSection> symTab;
   std::unique_ptr<SymtabShndxSection> symTabShndx;
+  // Popcorn2 sections
+  std::unique_ptr<PopcornCapabilitySection> popcornCap;
 };
 
 struct Ctx : CommonLinkerContext {

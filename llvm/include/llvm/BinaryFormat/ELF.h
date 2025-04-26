@@ -1158,6 +1158,7 @@ enum : unsigned {
   SHT_GNU_verdef = 0x6ffffffd,     // GNU version definitions.
   SHT_GNU_verneed = 0x6ffffffe,    // GNU version references.
   SHT_GNU_versym = 0x6fffffff,     // GNU symbol versions table.
+  SHT_POPCORN_capability = 0x61000000, // Popcorn2 capability list
   SHT_HIOS = 0x6fffffff,           // Highest operating system-specific type.
   SHT_LOPROC = 0x70000000,         // Lowest processor arch-specific type.
   // Fixme: All this is duplicated in MCSectionELF. Why??

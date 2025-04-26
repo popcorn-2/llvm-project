@@ -154,6 +154,10 @@ defm bp_compression_sort_startup_functions: BB<"bp-compression-sort-startup-func
 def verbose_bp_section_orderer: FF<"verbose-bp-section-orderer">,
   HelpText<"Print information on balanced partitioning">;
 
+def popcorn_capability: Separate<["--"], "capability">,
+  HelpText<"Add a Popcorn2 capability, can be passed multiple times">,
+  MetaVarName<"<capability>">;
+
 // --chroot doesn't have a help text because it is an internal option.
 def chroot: Separate<["--"], "chroot">;
 
