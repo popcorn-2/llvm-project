@@ -15,7 +15,7 @@ jobs:
     - name: Checkout fork repo
       uses: actions/checkout@v4
       with:
-        fetch-depth: 15 # only pull enough to cover our extra commits
+        fetch-depth: 20 # only pull enough to cover our extra commits
 
     - name: Rebase onto upstream
       run: |
