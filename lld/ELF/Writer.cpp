@@ -2473,8 +2473,10 @@ Writer<ELFT>::createPhdrs(Partition &part) {
     addHdr(PT_GNU_PROPERTY, PF_R)->add(cmd);
 
   // Create one PT_NOTE per a group of contiguous SHT_NOTE sections with the
-  // same alignment.
+  // same alignment
+  // Also create one PT_POPCORN_capability for all SHT_POPCORN_capability sections
   PhdrEntry *note = nullptr;
+  PhdrEntry *popcorn_capability = nullptr;
   for (OutputSection *sec : ctx.outputSections) {
     if (sec->partition != partNo)
       continue;
@@ -2484,6 +2486,11 @@ Writer<ELFT>::createPhdrs(Partition &part) {
       note->add(sec);
     } else {
       note = nullptr;
+    }
+    if (ctx.arg.osabi == ELFOSABI_POPCORN && sec->type == SHT_POPCORN_capability) {
+      if (!popcorn_capability)
+        popcorn_capability = addHdr(PT_POPCORN_capability, PF_R);
+      popcorn_capability->add(sec);
     }
   }
   return ret;
