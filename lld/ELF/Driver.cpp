@@ -1978,6 +1978,8 @@ static void readConfigs(Ctx &ctx, opt::InputArgList &args) {
     } else {
       ErrAlways(ctx) << "cannot find version script " << arg->getValue();
     }
+  
+  ctx.arg.popcorn_capabilities = args.getAllArgValues(OPT_popcorn_capability);
 }
 
 // Some Config members do not directly correspond to any particular
