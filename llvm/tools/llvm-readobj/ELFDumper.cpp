@@ -1102,6 +1102,7 @@ const EnumEntry<unsigned> ElfOSABI[] = {
     {"CloudABI", "CloudABI", ELF::ELFOSABI_CLOUDABI},
     {"CUDA", "NVIDIA - CUDA", ELF::ELFOSABI_CUDA},
     {"CUDA", "NVIDIA - CUDA", ELF::ELFOSABI_CUDA_V2},
+    {"Popcorn", "Popcorn", ELF::ELFOSABI_POPCORN},
     {"Standalone", "Standalone App", ELF::ELFOSABI_STANDALONE}};
 
 const EnumEntry<unsigned> AMDGPUElfOSABI[] = {

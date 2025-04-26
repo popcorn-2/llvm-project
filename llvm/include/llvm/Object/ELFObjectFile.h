@@ -1487,6 +1487,8 @@ template <class ELFT> Triple::OSType ELFObjectFile<ELFT>::getOS() const {
     return Triple::AMDPAL;
   case ELF::ELFOSABI_AMDGPU_MESA3D:
     return Triple::Mesa3D;
+  case ELF::ELFOSABI_POPCORN:
+    return Triple::Popcorn;
   default:
     return Triple::UnknownOS;
   }

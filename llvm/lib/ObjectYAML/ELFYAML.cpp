@@ -412,6 +412,7 @@ void ScalarEnumerationTraits<ELFYAML::ELF_ELFOSABI>::enumeration(
   ECase(ELFOSABI_C6000_ELFABI);
   ECase(ELFOSABI_C6000_LINUX);
   ECase(ELFOSABI_STANDALONE);
+  ECase(ELFOSABI_POPCORN);
 #undef ECase
   IO.enumFallback<Hex8>(Value);
 }

@@ -658,6 +658,7 @@ uint8_t ELF::convertNameToOSABI(StringRef Name) {
       .StartsWith("arm", ELFOSABI_ARM)
       .StartsWith("standalone", ELFOSABI_STANDALONE)
       .StartsWith("none", ELFOSABI_NONE)
+      .StartsWith("popcorn", ELFOSABI_POPCORN)
       .Default(ELFOSABI_NONE);
 }
 
@@ -707,6 +708,8 @@ StringRef ELF::convertOSABIToName(uint8_t OSABI) {
     return "arm";
   case ELFOSABI_STANDALONE:
     return "standalone";
+  case ELFOSABI_POPCORN:
+    return "popcorn";
   default:
     return "none";
   }
