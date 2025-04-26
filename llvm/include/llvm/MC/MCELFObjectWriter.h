@@ -80,6 +80,8 @@ public:
         return ELF::ELFOSABI_SOLARIS;
       case Triple::OpenBSD:
         return ELF::ELFOSABI_OPENBSD;
+      case Triple::Popcorn:
+        return ELF::ELFOSABI_POPCORN;
       default:
         return ELF::ELFOSABI_NONE;
     }
