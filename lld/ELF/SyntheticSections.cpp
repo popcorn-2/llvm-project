@@ -362,6 +362,31 @@ size_t GnuPropertySection::getSize() const {
   return contentSize + 16;
 }
 
+PopcornCapabilitySection::PopcornCapabilitySection(Ctx &ctx)
+    : SyntheticSection(ctx, ".popcorn.capability", SHT_POPCORN_capability, SHF_ALLOC, 1) {
+      // StringSaver guarantees that the returned string ends with '\0'.
+      for (const std::string& capability : ctx.arg.popcorn_capabilities) {
+        ArrayRef<uint8_t> contents = {(const uint8_t *)capability.data(), capability.size() + 1};
+
+        this->capabilities.push_back(contents);
+      }
+}
+
+void PopcornCapabilitySection::writeTo(uint8_t *buf) {
+  for (ArrayRef<uint8_t> capability : this->capabilities) {
+    memcpy(buf, capability.data(), capability.size());
+    buf += capability.size();
+  }
+}
+
+size_t PopcornCapabilitySection::getSize() const {
+  uint32_t contentSize = 0;
+  for (ArrayRef<uint8_t> capability : this->capabilities) {
+    contentSize += capability.size();
+  }
+  return contentSize;
+}
+
 BuildIdSection::BuildIdSection(Ctx &ctx)
     : SyntheticSection(ctx, ".note.gnu.build-id", SHT_NOTE, SHF_ALLOC, 4),
       hashSize(getHashSize(ctx)) {}
@@ -4993,6 +5018,11 @@ template <class ELFT> void elf::createSyntheticSections(Ctx &ctx) {
     add(*ctx.in.shStrTab);
   if (ctx.in.strTab)
     add(*ctx.in.strTab);
+
+  if (ctx.arg.popcorn_capabilities.size() > 0) {
+    ctx.in.popcornCap = std::make_unique<PopcornCapabilitySection>(ctx);
+    add(*ctx.in.popcornCap);
+  }
 }
 
 template void elf::splitSections<ELF32LE>(Ctx &);
