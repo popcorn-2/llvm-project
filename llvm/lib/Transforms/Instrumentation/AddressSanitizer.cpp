@@ -121,6 +121,7 @@ static const uint64_t kNetBSDKasan_ShadowOffset64 = 0xdfff900000000000;
 static const uint64_t kPS_ShadowOffset64 = 1ULL << 40;
 static const uint64_t kWindowsShadowOffset32 = 3ULL << 28;
 static const uint64_t kWebAssemblyShadowOffset = 0;
+static const uint64_t kPopcornKasan_ShadowOffset64 = 0xdfffd00000000000;
 
 // The shadow memory space is dynamically allocated.
 static const uint64_t kWindowsShadowOffset64 = kDynamicShadowSentinel;
@@ -519,6 +520,7 @@ static ShadowMapping getShadowMapping(const Triple &TargetTriple, int LongSize,
   bool IsHaiku = TargetTriple.isOSHaiku();
   bool IsWasm = TargetTriple.isWasm();
   bool IsBPF = TargetTriple.isBPF();
+  bool IsPopcorn = TargetTriple.isOSPopcorn();
 
   ShadowMapping Mapping;
 
@@ -597,6 +599,12 @@ static ShadowMapping getShadowMapping(const Triple &TargetTriple, int LongSize,
                         (kSmallX86_64ShadowOffsetAlignMask << Mapping.Scale));
     else if (IsBPF)
       Mapping.Offset = kDynamicShadowSentinel;
+    else if (IsPopcorn) {
+      if (IsKasan)
+        Mapping.Offset = kPopcornKasan_ShadowOffset64;
+      else
+        Mapping.Offset = kDefaultShadowOffset64;
+    }
     else
       Mapping.Offset = kDefaultShadowOffset64;
   }
@@ -1096,7 +1104,7 @@ struct FunctionStackPoisoner : public InstVisitor<FunctionStackPoisoner> {
         IntptrTy(ASan.IntptrTy),
         IntptrPtrTy(PointerType::get(IntptrTy->getContext(), 0)),
         Mapping(ASan.Mapping),
-        PoisonStack(ClStack && !F.getParent()->getTargetTriple().isAMDGPU()) {}
+        PoisonStack(ClStack && !F.getParent()->getTargetTriple().isAMDGPU() && !F.getParent()->getTargetTriple().isOSPopcorn()) {}
 
   bool runOnFunction() {
     if (!PoisonStack)
