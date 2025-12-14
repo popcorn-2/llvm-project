@@ -77,7 +77,7 @@ void popcorn::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 
   if (D.isUsingLTO()) {
     assert(!Inputs.empty() && "Must have at least one input.");
-    addLTOOptions(ToolChain, Args, CmdArgs, Output, Inputs[0],
+    addLTOOptions(ToolChain, Args, CmdArgs, Output, Inputs,
                   D.getLTOMode() == LTOK_Thin);
   }
 
@@ -142,7 +142,7 @@ Tool *Popcorn::buildLinker() const {
 
 ToolChain::RuntimeLibType Popcorn::GetRuntimeLibType(
     const ArgList &Args) const {
-  if (Arg *A = Args.getLastArg(clang::driver::options::OPT_rtlib_EQ)) {
+  if (Arg *A = Args.getLastArg(options::OPT_rtlib_EQ)) {
     StringRef Value = A->getValue();
     if (Value != "compiler-rt")
       getDriver().Diag(clang::diag::err_drv_invalid_rtlib_name)
