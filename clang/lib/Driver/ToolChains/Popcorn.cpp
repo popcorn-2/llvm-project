@@ -63,6 +63,7 @@ void popcorn::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   CmdArgs.push_back(Output.getFilename());
 
   if (!Args.hasArg(options::OPT_nostdlib, options::OPT_nostartfiles)) {
+    CmdArgs.push_back("-lrt");
     if (!Args.hasArg(options::OPT_shared)) {
       CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crt1.o")));
       CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crti.o")));
@@ -97,7 +98,6 @@ void popcorn::Linker::ConstructJob(Compilation &C, const JobAction &JA,
         ToolChain.AddCXXStdlibLibArgs(Args, CmdArgs);
         if (OnlyLibstdcxxStatic)
           CmdArgs.push_back("-Bdynamic");
-        CmdArgs.push_back("-lm");
         CmdArgs.push_back("--pop-state");
       }
     }
@@ -226,6 +226,8 @@ void Popcorn::AddCXXStdlibLibArgs(const ArgList &Args,
   case ToolChain::CST_Libcxx:
     CmdArgs.push_back("-lc++");
     CmdArgs.push_back("-lc++abi");
+    if (Args.hasArg(options::OPT_fexperimental_library))
+      CmdArgs.push_back("-lc++experimental");
     break;
 
   case ToolChain::CST_Libstdcxx:
