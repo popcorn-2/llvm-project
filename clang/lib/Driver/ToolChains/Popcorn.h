@@ -51,7 +51,7 @@ public:
     return ToolChain::CST_Libcxx;
   }
   llvm::ExceptionHandling GetExceptionModel(const llvm::opt::ArgList &Args) const override {
-    return llvm::ExceptionHandling::SjLj;
+    return llvm::ExceptionHandling::DwarfCFI;
   }
   bool isPICDefault() const override { return false; }
   bool isPIEDefault(const llvm::opt::ArgList &Args) const override { return true; }
