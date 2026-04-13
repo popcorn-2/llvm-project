@@ -690,6 +690,9 @@ typedef __char32_t char32_t;
 #    elif defined(__Fuchsia__)
 // TODO(44575): Switch to C11 thread API when possible.
 #      define _LIBCPP_HAS_THREAD_API_PTHREAD
+#    elif defined(__POPCORN__)
+// TODO(44575): Switch to C11 thread API when possible.
+#      define _LIBCPP_HAS_THREAD_API_PTHREAD
 #    elif defined(_LIBCPP_WIN32API)
 #      define _LIBCPP_HAS_THREAD_API_WIN32
 #    else
